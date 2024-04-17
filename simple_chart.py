@@ -69,7 +69,25 @@ if data_select == 'Candlestick':
             "series": [{
                 "type": 'Candlestick',
                 "data": stock_data,
-                "options": {}
+                "options": {},
+                "markers": [
+                {
+                    "time": '2024-02-03',
+                    "position": 'aboveBar',
+                    "color": 'rgba(67, 83, 254, 1)',
+                    "shape": 'arrowDown',
+                    "text": 'SELL',
+                    "size": 3
+                },
+                {
+                    "time": '2024-01-16',
+                    "position": 'belowBar',
+                    "color": 'rgba(67, 83, 254, 1)',
+                    "shape": 'arrowUp',
+                    "text": 'BUY',
+                    "size": 3
+                }
+                ]
             }],
         }
     ], 'area')
