@@ -28,7 +28,7 @@ def convertdata(list_of_dictionaries):
     return dict
 
 
-st.subheader("Data Toggling for an Area Chart")
+st.subheader("Data Toggling for an Area Chart and Candlestick")
 
 my_query_params = st.query_params.to_dict()
 ticker = my_query_params["ticker"]
