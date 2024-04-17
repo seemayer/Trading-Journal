@@ -32,16 +32,18 @@ st.subheader("Data Toggling for an Area Chart and Candlestick")
 
 my_query_params = st.query_params.to_dict()
 ticker = my_query_params["ticker"]
-start = datetime.datetime.strptime(my_query_params["start"],"%Y-%m-%d")
-end = datetime.datetime.strptime(my_query_params["end"],"%Y-%m-%d")
+start = my_query_params["start"]
+end = my_query_params["end"]
+stop = my_query_params["stop"]
+target = my_query_params["target"]
 
 st.write("My Query Params:",ticker,start,end)
 
-stock_data=datahandler(my_query_params["ticker"],my_query_params["start"],my_query_params["end"])
+stock_data=datahandler(ticker,start,end)
 
 selected_date = st.date_input(
     "Select time period",
-    (start, end),
+    (datetime.datetime.strptime(start,"%Y-%m-%d"), datetime.datetime.strptime(end,"%Y-%m-%d")),
     max_value=datetime.datetime.now(),
     format="MM.DD.YYYY"
 )
@@ -66,7 +68,8 @@ if data_select == 'Candlestick':
     renderLightweightCharts( [
         {
             "chart": chartOptions,
-            "series": [{
+            "series": [
+            {
                 "type": 'Candlestick',
                 "data": stock_data,
                 "options": {},
@@ -88,7 +91,24 @@ if data_select == 'Candlestick':
                     "size": 3
                 }
                 ]
-            }],
+            },
+            { #stop
+                "type": 'Line',
+                "data": [
+                    { "time": '2024-02-02', "value": stop },
+                    { "time": '2024-03-25', "value": stop }
+                ],
+                "options": {}
+            },
+            { #target
+                "type": 'Line',
+                "data": [
+                    { "time": '2024-02-02', "value": target },
+                    { "time": '2024-03-25', "value": target }
+                ],
+                "options": {}
+            }
+            ],
         }
     ], 'area')
 else:
