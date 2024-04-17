@@ -95,7 +95,7 @@ if data_select == 'Candlestick':
             { #stop
                 "type": 'Line',
                 "data": [
-                    { "time": '2024-02-02', "value": stop },
+                    { "time": start, "value": stop },
                     { "time": '2024-03-25', "value": stop }
                 ],
                 "options": {}
@@ -103,7 +103,7 @@ if data_select == 'Candlestick':
             { #target
                 "type": 'Line',
                 "data": [
-                    { "time": '2024-02-02', "value": target },
+                    { "time": start, "value": target },
                     { "time": '2024-03-25', "value": target }
                 ],
                 "options": {}
