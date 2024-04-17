@@ -1,9 +1,8 @@
 import streamlit as st
 from streamlit_lightweight_charts import renderLightweightCharts
-import streamlit_lightweight_charts.dataSamples as data
 import datetime
-from datetime import timedelta
 import yfinance as yf
+import pandas as pd
 
 def datahandler(ticker,start_date,end_date):
     print(f'Getting stock data for {ticker}')
@@ -21,6 +20,14 @@ def datahandler(ticker,start_date,end_date):
         
     return dict
 
+def convertdata(list_of_dictionaries):
+    df = pd.DataFrame(list_of_dictionaries)
+    df = df[['time','close']]
+    df = df.rename(columns={'close': 'value'})
+    dict = df.to_dict(orient='records') #convert to dictionary
+    return dict
+
+
 st.subheader("Data Toggling for an Area Chart")
 
 my_query_params = st.query_params.to_dict()
@@ -28,10 +35,9 @@ ticker = my_query_params["ticker"]
 start = datetime.datetime.strptime(my_query_params["start"],"%Y-%m-%d")
 end = datetime.datetime.strptime(my_query_params["end"],"%Y-%m-%d")
 
-st.write("My Query Params:",ticker,my_query_params["start"],my_query_params["end"])
+st.write("My Query Params:",ticker,start,end)
 
-
-
+stock_data=datahandler(my_query_params["ticker"],my_query_params["start"],my_query_params["end"])
 
 selected_date = st.date_input(
     "Select time period",
@@ -41,9 +47,8 @@ selected_date = st.date_input(
 )
 
 if selected_date:
-    st.write("You selected:", selected_date)
-    stock_data=datahandler(my_query_params["ticker"],my_query_params["start"],my_query_params["end"])
-    #stock_data=datahandler(ticker,selected_date[0],selected_date[1])
+    st.write("You selected:", selected_date)    
+    stock_data=datahandler(ticker,selected_date[0],selected_date[1])
 
 chartOptions = {
     "layout": {
@@ -55,15 +60,27 @@ chartOptions = {
     }
 }
 
+data_select = st.sidebar.radio('Select chart type source:', ('Candlestick', 'Area'))
 
-renderLightweightCharts( [
-    {
-         "chart": chartOptions,
-         "series": [{
-             "type": 'Candlestick',
-             "data": stock_data,
-             "options": {}
-         }],
-      }
-], 'area')
-
+if data_select == 'Candlestick':
+    renderLightweightCharts( [
+        {
+            "chart": chartOptions,
+            "series": [{
+                "type": 'Candlestick',
+                "data": stock_data,
+                "options": {}
+            }],
+        }
+    ], 'area')
+else:
+     renderLightweightCharts( [
+        {
+            "chart": chartOptions,
+            "series": [{
+                "type": 'Area',
+                "data": convertdata(stock_data),
+                "options": {}
+            }],
+        }
+    ], 'area')   
