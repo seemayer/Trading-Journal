@@ -75,7 +75,7 @@ if data_select == 'Candlestick':
                 "options": {},
                 "markers": [
                 {
-                    "time": '2024-02-03',
+                    "time": end,
                     "position": 'aboveBar',
                     "color": 'rgba(67, 83, 254, 1)',
                     "shape": 'arrowDown',
@@ -83,7 +83,7 @@ if data_select == 'Candlestick':
                     "size": 3
                 },
                 {
-                    "time": '2024-01-16',
+                    "time": start,
                     "position": 'belowBar',
                     "color": 'rgba(67, 83, 254, 1)',
                     "shape": 'arrowUp',
