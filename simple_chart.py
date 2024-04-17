@@ -27,6 +27,12 @@ def convertdata(list_of_dictionaries):
     dict = df.to_dict(orient='records') #convert to dictionary
     return dict
 
+def adddaystodatestring(start_date):
+    date_1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = date_1 + datetime.timedelta(days=10)
+    end_date_str = end_date.strftime("%Y-%m-%d")  # Convert back to string
+    return end_date_str
+
 
 st.subheader("Data Toggling for an Area Chart and Candlestick")
 
@@ -50,7 +56,7 @@ selected_date = st.date_input(
 
 if selected_date:
     st.write("You selected:", selected_date)    
-    stock_data=datahandler(ticker,selected_date[0],selected_date[1])
+    stock_data=datahandler(ticker,selected_date[0] - datetime.timedelta(days=10),selected_date[1] + datetime.timedelta(days=10))
 
 chartOptions = {
     "layout": {
@@ -96,17 +102,17 @@ if data_select == 'Candlestick':
                 "type": 'Line',
                 "data": [
                     { "time": start, "value": stop },
-                    { "time": '2024-03-25', "value": stop }
+                    { "time": adddaystodatestring(start), "value": stop }
                 ],
-                "options": {}
+                "options": {"color":"red"}
             },
             { #target
                 "type": 'Line',
                 "data": [
                     { "time": start, "value": target },
-                    { "time": '2024-03-25', "value": target }
+                    { "time": adddaystodatestring(start), "value": target }
                 ],
-                "options": {}
+                "options": {"color":"green"}
             }
             ],
         }
