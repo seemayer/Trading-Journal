@@ -4,8 +4,10 @@ from st_aggrid import AgGrid, GridOptionsBuilder, DataReturnMode, GridUpdateMode
 
 # Create a DataFrame
 df = pd.DataFrame({
-    'col1': [1, 2, 3],
-    'col2': [4, 5, 6]
+    'Pounds_Per_Point': [1, 2, 3],
+    'Entry_Price': [4, 5, 6],
+    'Stop': [4, 5, 6],
+    'Target': [4, 5, 6],
 })
 
 # Define grid options
@@ -13,9 +15,10 @@ gb = GridOptionsBuilder.from_dataframe(df)
 gb.configure_default_column(editable=True)  # Make columns editable by default
 
 # Define the calculated column using an expression
-gb.configure_column('col1', type=['numericColumn'])
-gb.configure_column('col2', type=['numericColumn'])
-gb.configure_column('col3', valueGetter='data.col1 + data.col2', type=['numericColumn'])
+
+gb.configure_column(field='Position_Size', valueGetter='data.Pounds_Per_Point * data.Entry_Price', type=['numericColumn'])
+gb.configure_column(field='Monetary Risk', valueGetter='(data.Entry_Price - data.Stop)*data.Pounds_Per_Point', type=['numericColumn'])
+gb.configure_column(field='R:R plan', valueGetter='(data.Target - data.Entry_Price)/(data.Entry_Price - data.Stop)', type=['numericColumn'])
 
 grid_options = gb.build()
 
