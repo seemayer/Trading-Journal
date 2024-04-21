@@ -1,4 +1,4 @@
-Date,Stock,Ticker,Stockopedia,Next Event Date,R:R plan,Pound Per Point,Entry Price (p),Position Size,Margin,Trade Rationale/Strategy,Target,Target Size,Stop,Stop Size,Monetary Risk,Live Price (p),Live P/L,Close Date,Close Price (p),P/L,Notes
+Date,Stock,Ticker,Stockopedia,Next_Event Date,R:R_plan,Pounds_Per_Point,Entry_Price,Position_Size,Margin,Trade_Rationale/Strategy,Target,Target_Size,Stop,Stop_Size,Monetary_Risk,Live_Price,Live_P/L,Close_Date,Close_Price,P/L,Notes
 22/09/2022,Gemfields Group Ltd,GEM.L,Super Stock,Mar & Sep,1.43,1,386.0,386,£96.50 ,Breakout,511.5,£511.50 ,298.0,£298.00 ,£88.00 ,12.25,(£373.75),20/10/2022,279.3,(£106.70),Geopolitical risk (insurgents nearby) halted production. Slippage on stop. Price closed lower than chart?
 22/09/2022,Brave Bison Group PLC,BBSN.L,Turnaround,Apr & Sep,2.6,700,2.14,"£1,498.00 ",£374.50 ,Breakout Retest,3.44,"£2,408.00 ",1.64,"£1,148.00 ",£350.00 ,2.85,£497.00 ,15/08/2023,2.45,£217.00 ,
 23/09/2022,Brave Bison Group PLC,BBSN.L,Turnaround,Aug & Nov,3.45,50,1.91,£95.50 ,£23.88 ,Breakout Retest,2.91,,1.62,£81.00 ,£14.50 ,2.85,£47.00 ,14/02/2023,2.98,£53.50 ,Target hit

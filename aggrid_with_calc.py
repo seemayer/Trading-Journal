@@ -15,7 +15,7 @@ gb.configure_default_column(editable=True)  # Make columns editable by default
 # Define the calculated column using an expression
 gb.configure_column('col1', type=['numericColumn'])
 gb.configure_column('col2', type=['numericColumn'])
-gb.configure_column('col3', valueGetter='data.col1 + data.col2', type=['numericColumn'])
+gb.configure_column('col3', valueGetter='data.col1 + data.col2', type=['shaded'])
 
 grid_options = gb.build()
 

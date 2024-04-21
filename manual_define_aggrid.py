@@ -5,7 +5,7 @@ from st_aggrid import AgGrid
 df = pd.DataFrame({'name': [1, 2, 3], 'age': [4, 5, 6]})
 
 columnDefs = [
-    { 'field': 'name', 'headerName': 'Name', 'editable': True },
+    { 'field': 'name', 'headerName': 'Name', 'editable': True, 'type':'shaded' },
     { 'field': 'age', 'headerName': 'Age', 'editable': True },
     { 'field': 'total', 'headerName': 'Total', 'valueGetter':'(data.name + data.age)'},
     { 'field': 'totalx2', 'headerName': 'Totalx2', 'valueGetter': 'getValue("total") * 2'},

@@ -3,7 +3,8 @@ from streamlit_lightweight_charts import renderLightweightCharts
 import datetime
 import yfinance as yf
 import pandas as pd
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, ColumnsAutoSizeMode
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, ColumnsAutoSizeMode, JsCode
+import st_aggrid as st_ag
 
 st. set_page_config(layout="wide")
 
@@ -42,13 +43,31 @@ control_container = st.container(border=True)
 chart_container = st.container(border=True)
 table_container = st.container(border=True)
 
+
+number_formatter = JsCode("""
+    function(params) {
+        return (params.value == null) ? params.value : "£"+params.value.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 }); 
+    }
+    """)
+
+r_formatter = JsCode("""
+    function(params) {
+        return (params.value == null) ? params.value : params.value.toLocaleString("en-US", { maximumFractionDigits: 1, minimumFractionDigits: 1 }); 
+    }
+    """)
+
+
 with table_container:
     # Configure the grid
-    #gb = GridOptionsBuilder.from_dataframe(df[['Date', 'Ticker']])
+ 
     gb = GridOptionsBuilder.from_dataframe(df)
     gb.configure_selection(selection_mode='single', use_checkbox=True)
     gb.configure_default_column(editable=True)
-    gb.configure_column("Date", editable=False)
+    #Define calculated columns
+    gb.configure_column(field='Position_Size', valueGetter='data.Pounds_Per_Point * data.Entry_Price', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
+    gb.configure_column(field='Margin', valueGetter= 'getValue("Position_Size") * .25', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
+    gb.configure_column(field='Monetary_Risk', valueGetter='(data.Entry_Price - data.Stop)*data.Pounds_Per_Point', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
+    gb.configure_column(field='R:R_plan', valueGetter='(data.Target - data.Entry_Price)/(data.Entry_Price - data.Stop)', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=r_formatter)
     gb.configure_side_bar()
     gridOptions = gb.build()
 
