@@ -58,6 +58,26 @@ r_formatter = JsCode("""
     }
     """)
 
+v_getter = JsCode("""
+   
+    function(params) {
+         
+        if (params.data.Close_Price) {
+            var output = (params.data.Close_Price - params.data.Entry_Price)*params.data.Pounds_Per_Point
+        } else {
+            return;
+        }
+        
+        // write to the data to aggrid
+        var col = params.colDef.field;
+        params.data[col] = output;
+
+        return output;                  
+        
+    }
+    
+    """)
+
 
 with table_container:
     # Configure the grid
@@ -69,6 +89,7 @@ with table_container:
     gb.configure_column(field='Position_Size', valueGetter='data.Pounds_Per_Point * data.Entry_Price', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
     gb.configure_column(field='Margin', valueGetter= 'getValue("Position_Size") * .25', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
     gb.configure_column(field='Monetary_Risk', valueGetter='(data.Entry_Price - data.Stop)*data.Pounds_Per_Point', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
+    gb.configure_column(field='P/L', valueGetter=v_getter, type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=number_formatter)
     gb.configure_column(field='R:R_plan', valueGetter='(data.Target - data.Entry_Price)/(data.Entry_Price - data.Stop)', type=['numericColumn'],cellStyle={'background-color': 'aliceblue'}, valueFormatter=r_formatter)
     gb.configure_side_bar()
     gridOptions = gb.build()
@@ -79,7 +100,8 @@ with table_container:
                 enable_enterprise_modules=True, 
                 allow_unsafe_jscode=True, 
                 update_mode=GridUpdateMode.VALUE_CHANGED | GridUpdateMode.SELECTION_CHANGED, 
-                columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS)
+                columns_auto_size_mode=ColumnsAutoSizeMode.FIT_CONTENTS
+                )
 
     # Process selected row
     selected_rows = data['selected_rows']
@@ -91,6 +113,7 @@ with table_container:
     sell_date = selected_rows.iloc[0]["Close_Date"]
     if sell_date:
         sell_date=convertdatestring(sell_date)
+        end=sell_date
         
 
     stop = selected_rows.iloc[0]["Stop"].astype(float) #must be float otherwise renderlightweightcharrs does not like it
@@ -102,14 +125,12 @@ with table_container:
 
     stock_data=get_stock_data(ticker,start,end)
     
+    
+    data['data'].to_csv("./output.csv", index=False)
+
+
 
 with control_container:
-    start_time = st.slider("When do you start?",
-                           min_value=datetime.date(2018, 1, 1),
-                           max_value=datetime.date(2022, 1, 1),
-                           value=(datetime.date(2020, 1, 1),datetime.date(2021, 1, 1)),
-                           format="MM/DD/YY")  
-    st.write("Start time:", start_time)
     
     selected_date = st.date_input(
         "Select time period",
