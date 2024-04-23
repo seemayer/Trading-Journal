@@ -104,24 +104,21 @@ with table_container:
                 )
 
     # Process selected row
-    selected_rows = data['selected_rows']
+    selected_rows = data['selected_rows'].iloc[0]
     # st.dataframe(data['selected_rows'])
 
-    ticker = selected_rows.iloc[0]["Ticker"]
-    start = convertdatestring(selected_rows.iloc[0]["Date"])
-    end = adddaystodatestring(convertdatestring(selected_rows.iloc[0]["Date"]),100)
-    sell_date = selected_rows.iloc[0]["Close_Date"]
+    ticker = selected_rows["Ticker"]
+    start = convertdatestring(selected_rows["Date"])
+    end = adddaystodatestring(convertdatestring(selected_rows["Date"]),100)
+    sell_date = selected_rows["Close_Date"]
     if sell_date:
         sell_date=convertdatestring(sell_date)
         end=sell_date
         
-
-    stop = selected_rows.iloc[0]["Stop"].astype(float) #must be float otherwise renderlightweightcharrs does not like it
-    target = selected_rows.iloc[0]["Target"].astype(float) #must be float otherwise renderlightweightcharrs does not like it
-    buyprice = selected_rows.iloc[0]["Entry_Price"].astype(float) #must be float otherwise renderlightweightcharrs does not like it
-    sellprice = selected_rows.iloc[0]["Close_Price"]
-    if sellprice: #only convert if sellprice exists
-        sellprice = sellprice.astype(float)
+    stop = float(selected_rows["Stop"] or 0)
+    target = float(selected_rows["Target"] or 0)
+    buyprice = float(selected_rows["Entry_Price"] or 0) 
+    sellprice = float(selected_rows["Close_Price"] or 0)
 
     stock_data=get_stock_data(ticker,start,end)
     
