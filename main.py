@@ -41,6 +41,13 @@ with table_container:
 
 with control_container:
     
+    
+    if st.button('Add row', type="primary"):
+        add_df = pd.read_csv("./extrarow.csv")
+        df = pd.concat([df, add_df], ignore_index=True)
+        df.to_csv("./data.csv", index=False)
+        
+    
     selected_date = st.date_input(
         "Select time period",
         (datetime.datetime.strptime(buy_date,"%Y-%m-%d"), datetime.datetime.strptime(end,"%Y-%m-%d")),
