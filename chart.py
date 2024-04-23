@@ -1,7 +1,7 @@
 from functions import *
 from streamlit_lightweight_charts import renderLightweightCharts
 
-def create_chart(stock_data,start,buyprice,stop,target,sell_date,sellprice):
+def create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
     chartOptions = {
         "layout": {
             "textColor": 'black',
@@ -23,7 +23,7 @@ def create_chart(stock_data,start,buyprice,stop,target,sell_date,sellprice):
                 "options": {},
                 "markers": [
                 {
-                    "time": start,
+                    "time": buy_date,
                     "position": 'belowBar',
                     "color": 'rgba(67, 83, 254, 1)',
                     "shape": 'arrowUp',
@@ -35,8 +35,8 @@ def create_chart(stock_data,start,buyprice,stop,target,sell_date,sellprice):
             { #stop
                 "type": 'Line', 
                 "data": [
-                    { "time": start, "value": stop },
-                    { "time": adddaystodatestring(start,10), "value": stop }
+                    { "time": buy_date, "value": stop },
+                    { "time": adddaystodatestring(buy_date,10), "value": stop }
                 ],
                 "options": {
                     "color":"red",
@@ -48,8 +48,8 @@ def create_chart(stock_data,start,buyprice,stop,target,sell_date,sellprice):
             { #target
                 "type": 'Line',
                 "data": [
-                    { "time": start, "value": target },
-                    { "time": adddaystodatestring(start,10), "value": target }
+                    { "time": buy_date, "value": target },
+                    { "time": adddaystodatestring(buy_date,10), "value": target }
                 ],
                 "options": {
                     "color":"green",
@@ -61,8 +61,8 @@ def create_chart(stock_data,start,buyprice,stop,target,sell_date,sellprice):
             { #buyline
                 "type": 'Line', 
                 "data": [
-                    { "time": start, "value": buyprice },
-                    { "time": adddaystodatestring(start,10), "value": buyprice }
+                    { "time": buy_date, "value": buyprice },
+                    { "time": adddaystodatestring(buy_date,10), "value": buyprice }
                 ],
                 "options": {
                     "color":"blue",

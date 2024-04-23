@@ -23,7 +23,7 @@ with table_container:
     # st.dataframe(data['selected_rows'])
 
     ticker = selected_rows["Ticker"]
-    start = convertdatestring(selected_rows["Date"])
+    buy_date = convertdatestring(selected_rows["Date"])
     end = adddaystodatestring(convertdatestring(selected_rows["Date"]),100)
     sell_date = selected_rows["Close_Date"]
     if sell_date:
@@ -35,7 +35,7 @@ with table_container:
     buyprice = float(selected_rows["Entry_Price"] or 0) 
     sellprice = float(selected_rows["Close_Price"] or 0)
 
-    stock_data=get_stock_data(ticker,start,end)
+    stock_data=get_stock_data(ticker,buy_date,end)
     
     data['data'].to_csv("./output.csv", index=False)
 
@@ -43,7 +43,7 @@ with control_container:
     
     selected_date = st.date_input(
         "Select time period",
-        (datetime.datetime.strptime(start,"%Y-%m-%d"), datetime.datetime.strptime(end,"%Y-%m-%d")),
+        (datetime.datetime.strptime(buy_date,"%Y-%m-%d"), datetime.datetime.strptime(end,"%Y-%m-%d")),
         max_value=datetime.datetime.now(),
         format="MM.DD.YYYY"
     )
@@ -53,5 +53,5 @@ with control_container:
         stock_data=get_stock_data(ticker,selected_date[0] - datetime.timedelta(days=100),selected_date[1] + datetime.timedelta(days=100))
 
 with chart_container:
-    create_chart(stock_data,start,buyprice,stop,target,sell_date,sellprice)
+    create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice)
     
