@@ -1,5 +1,5 @@
 modules = ["python-3.10:v18-20230807-322e88b"]
-run = "python chart.py"
+run = "python main.py"
 
 [nix]
 channel = "stable-23_05"
@@ -11,7 +11,7 @@ language = "python3"
 requiredFiles = [".replit", "replit.nix"]
 
 [deployment]
-run = ["sh", "-c", "python chart.py"]
+run = ["sh", "-c", "python main.py"]
 deploymentTarget = "cloudrun"
 
 [[ports]]
