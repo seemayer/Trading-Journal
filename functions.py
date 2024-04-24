@@ -27,4 +27,7 @@ def adddaystodatestring(start_date,days):
     return end_date_str
 
 def convertdatestring(sDate):
-    return datetime.datetime.strptime(sDate, '%d/%m/%Y').strftime('%Y-%m-%d')    
+    if sDate:
+        return datetime.datetime.strptime(sDate, '%d/%m/%Y').strftime('%Y-%m-%d')
+    else:
+        return
