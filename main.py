@@ -5,6 +5,13 @@ from functions import *
 import streamlit as st
 import pandas as pd
 
+#Define custom CSS
+custom_css = {
+    ".cell-pass": {"background-color": "red !important"},
+    ".cell-fail": {"background-color": "orange !important"}
+    }
+
+
 st.set_page_config(layout="wide")
 st.subheader("Trade Chart")
 
