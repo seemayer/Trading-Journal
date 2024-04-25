@@ -10,9 +10,6 @@ fmt_CurrencyRG = JsCode("""
     }
     """)
 
-
-
-
 fmt_Currency = JsCode("""
     function(params) {
         return (params.value == null) ? params.value : "£"+params.value.toLocaleString("en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 }); 
@@ -30,11 +27,8 @@ CalcCol = {
     "type":['numericColumn'],
     "cellStyle": {
         'background-color': 'aliceblue'
-        },
-    
+        },  
 }
-
-
 
 v_getter = JsCode("""
     function(params) {
@@ -66,7 +60,6 @@ def create_grid(df):
     gb.configure_side_bar()
     gridOptions = gb.build()
     
-
     # Display the grid
     data = AgGrid(df, gridOptions=gridOptions,
                 editable=True, 

@@ -5,7 +5,6 @@ from functions import *
 import streamlit as st
 import pandas as pd
 
-
 st.set_page_config(layout="wide")
 st.subheader("Trade Chart")
 
@@ -17,6 +16,9 @@ table_container = st.container(border=True)
 with table_container:
     
     df = pd.read_csv("./data.csv")
+    if st.button('Add row', type="primary"):
+        df.loc[len(df)] = pd.Series()
+        df.to_csv("./data.csv", index=False)
     data = create_grid(df)
 
     # Process selected row
@@ -33,27 +35,21 @@ with table_container:
     buyprice = float(selected_rows["Entry_Price"] or 0) 
     sellprice = float(selected_rows["Close_Price"] or 0)
 
-    # stock_data=get_stock_data(ticker,buy_date,end)
-    
-    # data['data'].to_csv("./output.csv", index=False)
+    data['data'].to_csv("./data.csv", index=False)
 
-with control_container:
-    
-    if st.button('Add row', type="primary"):
-        add_df = pd.read_csv("./extrarow.csv")
-        df = pd.concat([df, add_df], ignore_index=True)
-        df.to_csv("./data.csv", index=False)
-        
-    selected_date = st.date_input(
-        "Select time period",
-        (datetime.datetime.strptime(buy_date,"%Y-%m-%d"), datetime.datetime.strptime(end,"%Y-%m-%d")),
-        max_value=datetime.datetime.now(),
-        format="MM.DD.YYYY"
-    )
+    if ticker and buy_date and buyprice and stop and target:
+        with control_container:
+                
+            selected_date = st.date_input(
+                "Select time period",
+                (datetime.datetime.strptime(buy_date,"%Y-%m-%d"), datetime.datetime.strptime(end,"%Y-%m-%d")),
+                max_value=datetime.datetime.now(),
+                format="MM.DD.YYYY"
+            )
 
-    if len(selected_date) == 2:
-        # st.write("You selected:", selected_date)    
-        stock_data=get_stock_data(ticker,selected_date[0] - datetime.timedelta(days=100),selected_date[1] + datetime.timedelta(days=100))
+            if len(selected_date) == 2:
+                # st.write("You selected:", selected_date)    
+                stock_data=get_stock_data(ticker,selected_date[0] - datetime.timedelta(days=100),selected_date[1] + datetime.timedelta(days=100))
 
-        with chart_container:
-            create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice)
+                with chart_container:
+                    create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice)

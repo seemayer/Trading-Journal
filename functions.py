@@ -21,10 +21,13 @@ def get_stock_data(ticker,start_date,end_date):
     return dict
 
 def adddaystodatestring(start_date,days):
-    date_1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
-    end_date = date_1 + datetime.timedelta(days)
-    end_date_str = end_date.strftime("%Y-%m-%d")  # Convert back to string
-    return end_date_str
+    if start_date:
+        date_1 = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = date_1 + datetime.timedelta(days)
+        end_date_str = end_date.strftime("%Y-%m-%d")  # Convert back to string
+        return end_date_str
+    else:
+        return
 
 def convertdatestring(sDate):
     if sDate:
