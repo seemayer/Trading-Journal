@@ -1,108 +1,50 @@
 from functions import *
-from datetime import datetime
-from streamlit_lightweight_charts import renderLightweightCharts
+import pandas as pd
+from lightweight_charts.widgets import StreamlitChart
+import datetime
+import streamlit as st
+
+# https://lightweight-charts-python.readthedocs.io/en/latest/index.html
+
+def create_chart(ticker,stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
 
 
-# create chart based on data for a trade
-def create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
-    chartOptions = {
-        "layout": {
-            "textColor": 'black',
-            "background": {
-                "type": 'solid',
-                "color": 'white'
-            }
-        },
-        "timeScale" : {
-            "borderColor":'#ff0000',
-            "visible":True,
-            "barSpacing" : 100
-        }
-    }
+    chart = StreamlitChart(width=900, height=600)
+    chart.watermark(ticker, color='rgba(180, 180, 240, 0.7)')
+    # chart.layout(background_color='white')
+    # chart.grid(False)
+    stock_data.to_csv('./stockdata.csv', index=False)
 
-    seriesOptions = [
-        {
-            "type": 'Candlestick',
-            "data": stock_data,
-            "options": {},
-            "markers": [
-            {
-                "time": buy_date,
-                "position": 'belowBar',
-                "color": 'rgba(67, 83, 254, 1)',
-                "shape": 'arrowUp',
-                "text": 'BUY',
-                "size": 1
-            }
-            ]
-        },
-        { #stop
-            "type": 'Line', 
-            "data": [
-                { "time": buy_date, "value": stop },
-                { "time": adddaystodatestring(buy_date,10), "value": stop }
-            ],
-            "options": {
-                "color":"red",
-                "lineWidth":1,
-                "lastValueVisible": False,
-                "priceLineVisible": False
-            }                
-        },
-        { #target
-            "type": 'Line',
-            "data": [
-                { "time": buy_date, "value": target },
-                { "time": adddaystodatestring(buy_date,10), "value": target }
-            ],
-            "options": {
-                "color":"green",
-                "lineWidth":1,
-                "lastValueVisible": False,
-                "priceLineVisible": False                    
-            }
-        },
-        { #buyline
-            "type": 'Line', 
-            "data": [
-                { "time": buy_date, "value": buyprice },
-                { "time": adddaystodatestring(buy_date,10), "value": buyprice }
-            ],
-            "options": {
-                "color":"blue",
-                "lineWidth":1,
-                "lastValueVisible": False,
-                "priceLineVisible": False
-            }                
-        }            
-        ]
-
-    if sell_date:
-        seriesOptions[0]['markers'].append(
-                    {
-                        "time": sell_date,
-                        "position": 'aboveBar',
-                        "color": 'rgba(67, 83, 254, 1)',
-                        "shape": 'arrowDown',
-                        "text": 'SELL',
-                        "size": 1
-                    })
-        seriesOptions.append(
-            { #sellline
-                "type": 'Line', 
-                "data": [
-                    { "time": sell_date, "value": sellprice },
-                    { "time": adddaystodatestring(sell_date,10), "value": sellprice }
-                ],
-                "options": {
-                    "color":"blue",
-                    "lineWidth":1,
-                    "lastValueVisible": False,
-                    "priceLineVisible": False
-                }                
-            } 
-        )
-
-    renderLightweightCharts([{"chart": chartOptions,"series": seriesOptions}])
+    chart.set(stock_data)
+    
+    linenddate = adddaystodatestring(buy_date,20)
+    
+    #buy line
+    line = chart.create_line('buyprice',price_line=False,price_label=False,color='blue',width=2)
+    line.set(pd.DataFrame([{'time': buy_date, 'buyprice': buyprice}, {'time': linenddate, 'buyprice': buyprice}]))
+    #stop line
+    line = chart.create_line('stop',price_line=False,price_label=False,color='red',width=2)
+    line.set(pd.DataFrame([{'time': buy_date, 'stop': stop}, {'time': linenddate, 'stop': stop}]))
+    # target line
+    line = chart.create_line('target',price_line=False,price_label=False,color='green',width=2)
+    line.set(pd.DataFrame([{'time': buy_date, 'target': target}, {'time': linenddate, 'target': target}]))
     
     
+    chart_start = adddaystodatestring(buy_date,-50)
+    chart_end = datetime.date.today().strftime("%Y-%m-%d")
+
+    
+    
+
+    chart.marker(buy_date,text='Buy',position='below',shape='arrow_up',color='green')
+    if sell_date: 
+        line = chart.create_line('sell',price_line=False,price_label=False,color='red',width=2)
+        line.set(pd.DataFrame([{'time': sell_date, 'sell': sellprice}, {'time': adddaystodatestring(sell_date,20), 'sell': sellprice}]))
+        chart.marker(sell_date,text='Sell',position='above',shape='arrow_down',color='red')
+        chart_end = adddaystodatestring(sell_date,20)
+
+
+    chart.set_visible_range(chart_start,chart_end)
+    chart.load()
+
+    st.write("Hello")
