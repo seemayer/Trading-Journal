@@ -6,21 +6,18 @@ import streamlit as st
 import pandas as pd
 
 st.set_page_config(layout="wide")
-st.subheader("Trade Chart")
+# st.subheader("Trade Chart")
 
 #set up widget order
-control_container = st.container(border=True)
+
 chart_container = st.container(border=True)
 table_container = st.container(border=True)
+control_container = st.container(border=True)
 
 with table_container:
     
     df = pd.read_csv("./data.csv")
     
-    # button to add a blank row
-    if st.button('Add row', type="primary"):
-        df.loc[len(df)] = pd.Series()
-        df.to_csv("./data.csv", index=False)
     data = create_grid(df)
 
     # Process selected row
@@ -38,6 +35,11 @@ with table_container:
     sellprice = float(selected_rows["Close_Price"] or 0)
 
     data['data'].to_csv("./data.csv", index=False)
+
+    # button to add a blank row
+    if st.button('Add row', type="primary"):
+        df.loc[len(df)] = pd.Series()
+        df.to_csv("./data.csv", index=False)
 
     if ticker and buy_date and buyprice and stop and target:
         with control_container:
