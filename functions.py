@@ -18,10 +18,7 @@ def get_stock_data(ticker,start_date,end_date):
     df.rename(columns={'Volume': 'Values'}, inplace=True)                
     df = df.fillna(0) # Replace NaN with zeros
 
-    # print(f'Data frame data for {ticker}:\n {df.head(5)}')
-    dict = df.to_dict(orient='records') #convert to dictionary
-        
-    return dict
+    return df
 
 def adddaystodatestring(start_date,days):
     if start_date:

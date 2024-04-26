@@ -1,5 +1,5 @@
 from grid import *
-from chart import *
+from newchart import *
 from functions import *
 
 import streamlit as st
@@ -54,4 +54,4 @@ with table_container:
                 stock_data=get_stock_data(ticker,selected_date[0] - datetime.timedelta(days=100),selected_date[1] + datetime.timedelta(days=100))
 
                 with chart_container:
-                    create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice)
+                    new_create_chart(ticker,stock_data,buy_date,buyprice,stop,target,sell_date,sellprice)
