@@ -4,7 +4,10 @@ import yfinance as yf
 def get_stock_data(ticker,start_date,end_date):
     print(f'Getting stock data for {ticker}')
 
-    df = yf.download(ticker,start=start_date,end=end_date)[['Open', 'High', 'Low', 'Close', 'Volume']] # download data from yahoo
+    df = yf.download(ticker,
+                    #  start=start_date,
+                    #  end=end_date
+                     )[['Open', 'High', 'Low', 'Close', 'Volume']] # download data from yahoo
     df['Volume'] = df['Volume'].astype(float)
     print(df.dtypes)
 

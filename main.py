@@ -16,6 +16,8 @@ table_container = st.container(border=True)
 with table_container:
     
     df = pd.read_csv("./data.csv")
+    
+    # button to add a blank row
     if st.button('Add row', type="primary"):
         df.loc[len(df)] = pd.Series()
         df.to_csv("./data.csv", index=False)

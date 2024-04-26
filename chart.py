@@ -1,5 +1,7 @@
 from functions import *
+from datetime import datetime
 from streamlit_lightweight_charts import renderLightweightCharts
+
 
 # create chart based on data for a trade
 def create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
@@ -14,6 +16,7 @@ def create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
         "timeScale" : {
             "borderColor":'#ff0000',
             "visible":True,
+            "barSpacing" : 100
         }
     }
 
@@ -101,3 +104,5 @@ def create_chart(stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
         )
 
     renderLightweightCharts([{"chart": chartOptions,"series": seriesOptions}])
+    
+    
