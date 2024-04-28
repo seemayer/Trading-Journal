@@ -5,3 +5,4 @@ streamlit==1.33.0
 streamlit_lightweight_charts==0.7.20
 yfinance==0.2.38
 streamlit-aggrid
+lightweight_charts
