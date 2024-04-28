@@ -9,7 +9,7 @@ import streamlit as st
 def create_chart(ticker,stock_data,buy_date,buyprice,stop,target,sell_date,sellprice):
 
 
-    chart = StreamlitChart(width=1200, height=500)
+    chart = StreamlitChart(width=1150, height=500)
     chart.watermark(ticker, color='rgba(180, 180, 240, 0.7)')
     # chart.layout(background_color='white')
     # chart.grid(False)
